@@ -23,6 +23,11 @@ input[type="text"] {
   font-size: 1.5rem;
 }
 
+.invalid {
+  background-color: red;
+  color: #242424;
+}
+
 button {
   width: 100%;
 }

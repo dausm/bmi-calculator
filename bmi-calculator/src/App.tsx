@@ -4,16 +4,21 @@ import './App.css'
 function App() {
   const [isMeteric, setMetricFlag] = useState(false);
   const [weight, setWeight] = useState('');
+  const [isValidWeight, setIsValidWeight] = useState(true);
   const [height, setHeight] = useState('');
+  const [isValidHeight, setIsValidHeight] = useState(true);
   const [message, setMessage] = useState('');
   const [bmi, setBmi] = useState('');
   const resultRef = useRef(null);
   
   function calculateBMI(event: any) {
     event.preventDefault();
-    let x = 0;
-    // Error handle if input is invalid
 
+    if(!checkInputValidity()){
+      return;
+    }
+    
+    let x = 0;
     if(isMeteric){
       const h = +height / 100;
       x = +weight / h**2;
@@ -45,6 +50,29 @@ function App() {
     resultRef.current.focus();
   }
 
+  // Error handle if input is invalid
+  function checkInputValidity(): boolean{
+    let isValid = true;
+    
+    if(height === ''
+      || isNaN(parseFloat(height))){
+        isValid = false;
+        setIsValidHeight(false);
+    } else {
+      setIsValidHeight(true);
+    }
+
+    if(weight === ''
+      || isNaN(parseFloat(weight))){
+        isValid = false;
+        setIsValidWeight(false);
+    } else {
+      setIsValidWeight(true);
+    }
+
+    return isValid;
+  }
+
   return (
       <div className="container">
         <h1>BMI Calculator</h1>
@@ -59,14 +87,16 @@ function App() {
           </label>
           <label>{isMeteric ? 'Weight (in kg)' : 'Weight (in lb)'}
             <input 
-              type='text' 
+              type='text'
               value={weight}
+              className={isValidWeight ? '' : 'invalid'}
               onChange={(e) => setWeight(e.target.value)}/>
           </label>
           <label>{isMeteric ? 'Height (in cm)' : 'Height (in inches)'}
             <input 
               type='text' 
               value={height}
+              className={isValidHeight ? '' : 'invalid'}
               onChange={(e) => setHeight(e.target.value)}/>
           </label>
         </form>
