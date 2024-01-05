@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
 
 function App() {
@@ -7,16 +7,17 @@ function App() {
   const [height, setHeight] = useState('');
   const [message, setMessage] = useState('');
   const [bmi, setBmi] = useState('');
+  const resultRef = useRef(null);
   
-  function calculateBMI() {
+  function calculateBMI(event: any) {
+    event.preventDefault();
     let x = 0;
+    // Error handle if input is invalid
 
     if(isMeteric){
       const h = +height / 100;
       x = +weight / h**2;
     } else {
-      const b = +weight;
-      const c = (+height)**2;
       x = (+weight / (+height)**2) * 703;
 
     }
@@ -40,35 +41,41 @@ function App() {
         setMessage('');
         break;
     }
+
+    resultRef.current.focus();
   }
 
-// prevent page reload if pressing enter
-
   return (
-    <>
       <div className="container">
         <h1>BMI Calculator</h1>
         <p>Calculate your Body Mass Index.</p>
-        <p>You need to use either the meteric or imperial system. No mixing.</p>
+        <p>You need to use either the meteric or imperial system.</p>
         <form>
           <label>Use meteric values
-            <input type='checkbox' checked={isMeteric} onChange={() => setMetricFlag(!isMeteric)}/>
+            <input 
+              type='checkbox' 
+              checked={isMeteric} 
+              onChange={() => setMetricFlag(!isMeteric)}/>
           </label>
-          <label>Weight
-            <input type='text' value={weight} onChange={(e) => setWeight(e.target.value)}/>
+          <label>{isMeteric ? 'Weight (in kg)' : 'Weight (in lb)'}
+            <input 
+              type='text' 
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}/>
           </label>
-          <label>Height
-            <input type='text' value={height} onChange={(e) => setHeight(e.target.value)}/>
+          <label>{isMeteric ? 'Height (in cm)' : 'Height (in inches)'}
+            <input 
+              type='text' 
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}/>
           </label>
         </form>
-          <button type='submit' onClick={() => calculateBMI()}>Calculate</button>
+          <button type='submit' onClick={(event) => calculateBMI(event)}>Calculate</button>
 
-        <p>
-          {bmi}
+        <p tabIndex={-1} ref={resultRef}>
+          Calculated BMI is: {bmi} - {message}
         </p>
-        <p>{message}</p>
       </div>
-    </>
   )
 }
 
