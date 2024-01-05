@@ -23,6 +23,7 @@ input[type="text"] {
   font-size: 1.5rem;
 }
 
+input:invalid,
 .invalid {
   background-color: red;
   color: #242424;

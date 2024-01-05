@@ -90,6 +90,8 @@ function App() {
               type='text'
               value={weight}
               className={isValidWeight ? '' : 'invalid'}
+              pattern='^\d+(\.\d+)?$'
+              required
               onChange={(e) => setWeight(e.target.value)}/>
           </label>
           <label>{isMeteric ? 'Height (in cm)' : 'Height (in inches)'}
@@ -97,6 +99,8 @@ function App() {
               type='text' 
               value={height}
               className={isValidHeight ? '' : 'invalid'}
+              pattern='^\d+(\.\d+)?$'
+              required
               onChange={(e) => setHeight(e.target.value)}/>
           </label>
         </form>
